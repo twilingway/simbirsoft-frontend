@@ -2,34 +2,75 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { LeagueList } from './LeagueList';
-import { getCompetition } from '../FootballDataAPI';
+import { useHttp } from '../hooks/http.hook';
+import { useMessage } from '../hooks/message';
 
 export const LeagueForm: React.FC = () => {
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [competitions, setCompetitions] = useState(null);
+  const message = useMessage();
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [competitions, setCompetitions] = useState([]);
+  const { loading, error, request, clearError } = useHttp();
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    console.log('startDate :>> ', startDate);
+    message(error);
+    clearError();
+  }, [error, message, clearError]);
+
+  const changeHandler = (event: Date) => {
+    setStartDate(event);
+    //getCompetitions(event?.getFullYear().toString());
+    console.log('changeHandler :>> ', event?.getFullYear());
+  };
+
+  const onChangeRawHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('onBlur :>> ', event.target.value);
+    if (event.target.value === undefined) {
+      console.log('onChangeRawHandler :>> ', startDate);
+    }
+  };
+
+  useEffect(() => {
+    if (startDate) {
+      setIsLoading(true);
+      console.log('startDate :>> ', startDate.getFullYear().toString());
+    }
   }, [startDate]);
 
-  // const keyDownHandler = (event: React.KeyboardEvent) => {
-  //   if (event.key === 'Enter') {
-  //     console.log('Enter :>> ', startDate);
-  //   }
-  // };
+  useEffect(() => {
+    const getCompetitions = async (year: string) => {
+      try {
+        const data = await request(
+          `http://api.football-data.org/v2/competitions`,
+          'GET'
+        );
+        console.log('data :>> ', data.competitions);
+        setCompetitions(data.competitions);
+        setIsLoading(false);
+      } catch (e) {}
+    };
+    if (isLoading && startDate) {
+      getCompetitions(startDate.getFullYear().toString());
+    }
+  }, [isLoading, request, startDate]);
 
   return (
-    <div className="input-field mt2">
-      <DatePicker
-        selected={startDate}
-        onChange={(date: Date) => setStartDate(date)}
-        showYearPicker
-        dateFormat="yyyy"
-        // onKeyDown={keyDownHandler}
-      />
-      <label htmlFor="datepicker" className="active">
-        Выберите год
-      </label>
-      {/* <LeagueList competitions={} /> */}
-    </div>
+    <>
+      <div className="form-floating mb-3">
+        <DatePicker
+          selected={startDate}
+          onChange={(date: Date) => setStartDate(date)}
+          dateFormat="yyyy"
+          disabled={loading}
+          className="form-control"
+          placeholderText="Выберите год"
+          showYearPicker
+          //onChangeRaw={onChangeRawHandler}
+          //customInput={<ExampleCustomInput />}
+        ></DatePicker>
+
+        <LeagueList competitions={competitions} />
+      </div>
+    </>
   );
 };

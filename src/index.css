@@ -1,4 +1,4 @@
-@import '~materialize-css/dist/css/materialize.min.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
 
 body {
   margin: 0;
@@ -19,10 +19,13 @@ code {
   padding-right: 1rem;
 }
 
-.mt2 {
-  margin-top: 2rem;
-}
-
 .league {
   margin-bottom: 1rem;
+}
+.react-datepicker__year-wrapper {
+  min-width: 205px;
+}
+
+.react-datepicker-wrapper {
+  min-width: 220px;
 }

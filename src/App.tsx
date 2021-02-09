@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import { LeagueForm } from './components/LeagueForm';
-import 'materialize-css';
 import { useRoutes } from './routes';
+import 'bootstrap';
 
 const App: React.FC = () => {
   const routes = useRoutes();

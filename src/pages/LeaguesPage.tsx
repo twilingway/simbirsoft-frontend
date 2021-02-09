@@ -1,13 +1,12 @@
 import React from 'react';
-import { useHttp } from '../hooks/http.hook';
+import { LeagueForm } from '../components/LeagueForm';
 
 export const LeaguesPage: React.FC = () => {
-  const { loading, error, request } = useHttp();
-
   return (
-    <div className="row">
-      <div className="col s6 offset-s3">
+    <div>
+      <div>
         <h1>Список лиг</h1>
+        <LeagueForm />
       </div>
     </div>
   );

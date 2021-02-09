@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import config from 'config';
 
 const conf = {
@@ -7,11 +7,11 @@ const conf = {
 
 export const getCompetition = async () => {
   try {
-    const response = await axios.get(
-      'http://api.football-data.org/v2/competitions',
-      conf
-    );
-    console.log('response :>> ', response);
-    return response.data.competitions;
+    // const response = await axios.get(
+    //   'http://api.football-data.org/v2/competitions',
+    //   conf
+    // );
+    // console.log('response :>> ', response);
+    // return response.data.competitions;
   } catch (error) {}
 };
