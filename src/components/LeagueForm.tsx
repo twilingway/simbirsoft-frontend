@@ -1,41 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { LeagueList } from './LeagueList';
 import { useHttp } from '../hooks/http.hook';
 import { useMessage } from '../hooks/message';
 
+import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import {
+  DatePicker,
+  TimePicker,
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+
+const queryString = require('query-string');
+
+interface IObjectKeys {
+  [key: string]: string | number | undefined;
+}
+export interface IQuery extends IObjectKeys {
+  search?: string;
+  year?: string;
+  page?: string;
+  row?: string;
+}
+
 export const LeagueForm: React.FC = () => {
   const message = useMessage();
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<MaterialUiPickersDate>(new Date());
   const [competitions, setCompetitions] = useState([]);
   const { loading, error, request, clearError } = useHttp();
   const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState<IQuery>(
+    queryString.parse(window.location.search)
+  );
 
   useEffect(() => {
     message(error);
     clearError();
   }, [error, message, clearError]);
 
-  const changeHandler = (event: Date) => {
-    setStartDate(event);
-    //getCompetitions(event?.getFullYear().toString());
-    console.log('changeHandler :>> ', event?.getFullYear());
-  };
-
-  const onChangeRawHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('onBlur :>> ', event.target.value);
-    if (event.target.value === undefined) {
-      console.log('onChangeRawHandler :>> ', startDate);
-    }
-  };
-
   useEffect(() => {
     if (startDate) {
       setIsLoading(true);
+      let tempQuery = { ...query };
+      tempQuery.year = startDate.getFullYear().toString();
+      setQuery({ ...tempQuery });
       console.log('startDate :>> ', startDate.getFullYear().toString());
     }
-  }, [startDate]);
+  }, [query, startDate]);
 
   useEffect(() => {
     const getCompetitions = async (year: string) => {
@@ -56,21 +68,17 @@ export const LeagueForm: React.FC = () => {
 
   return (
     <>
-      <div className="form-floating mb-3">
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker
-          selected={startDate}
-          onChange={(date: Date) => setStartDate(date)}
-          dateFormat="yyyy"
+          views={['year']}
+          label="Выберите год"
+          value={startDate}
+          onChange={setStartDate}
           disabled={loading}
-          className="form-control"
-          placeholderText="Выберите год"
-          showYearPicker
-          //onChangeRaw={onChangeRawHandler}
-          //customInput={<ExampleCustomInput />}
-        ></DatePicker>
-
-        <LeagueList competitions={competitions} />
-      </div>
+        />
+      </MuiPickersUtilsProvider>
+      <p />
+      <LeagueList competitions={competitions} loading={loading} query={query} />
     </>
   );
 };

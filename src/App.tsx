@@ -1,16 +1,18 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+
 import { Navbar } from './components/Navbar';
 import { useRoutes } from './routes';
-import 'bootstrap';
+import Container from '@material-ui/core/Container';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 const App: React.FC = () => {
   const routes = useRoutes();
   return (
-    <BrowserRouter>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Navbar />
-      <div className="container">{routes}</div>
-    </BrowserRouter>
+      <Container maxWidth="lg">{routes}</Container>
+    </MuiPickersUtilsProvider>
   );
 };
 
