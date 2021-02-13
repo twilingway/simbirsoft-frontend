@@ -1,70 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { LeagueList } from './LeagueList';
 import { useHttp } from '../hooks/http.hook';
 import { useMessage } from '../hooks/message';
+import { Context } from '../context';
 
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
-import {
-  DatePicker,
-  TimePicker,
-  DateTimePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-
-const queryString = require('query-string');
-
-interface IObjectKeys {
-  [key: string]: string | number | undefined;
-}
-export interface IQuery extends IObjectKeys {
-  search?: string;
-  year?: string;
-  page?: string;
-  row?: string;
-}
 
 export const LeagueForm: React.FC = () => {
   const message = useMessage();
-  const [startDate, setStartDate] = useState<MaterialUiPickersDate>(new Date());
+  const { setQueryParam, query } = useContext(Context);
+
+  const newDate: Date = query.year
+    ? new Date(Number(query.year), 0, 1)
+    : new Date();
+  console.log('newDate :>> ', newDate);
+
   const [competitions, setCompetitions] = useState([]);
   const { loading, error, request, clearError } = useHttp();
-  const [isLoading, setIsLoading] = useState(false);
-  const [query, setQuery] = useState<IQuery>(
-    queryString.parse(window.location.search)
-  );
+
+  const getCompetitions = async (year: string) => {
+    try {
+      const data = await request(
+        `http://api.football-data.org/v2/competitions`,
+        'GET'
+      );
+      console.log('data :>> ', data.competitions);
+      setCompetitions(data.competitions);
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    if (query.year) {
+      getCompetitions(
+        query.year ? query.year : new Date().getFullYear().toString()
+      );
+    }
+  }, []);
 
   useEffect(() => {
     message(error);
     clearError();
   }, [error, message, clearError]);
 
-  useEffect(() => {
-    if (startDate) {
-      setIsLoading(true);
-      let tempQuery = { ...query };
-      tempQuery.year = startDate.getFullYear().toString();
-      setQuery({ ...tempQuery });
-      console.log('startDate :>> ', startDate.getFullYear().toString());
+  const onChangeHandler = async (event: MaterialUiPickersDate) => {
+    if (event) {
+      setQueryParam('year', event.getFullYear().toString());
+      await getCompetitions(event.getFullYear().toString());
     }
-  }, [query, startDate]);
-
-  useEffect(() => {
-    const getCompetitions = async (year: string) => {
-      try {
-        const data = await request(
-          `http://api.football-data.org/v2/competitions`,
-          'GET'
-        );
-        console.log('data :>> ', data.competitions);
-        setCompetitions(data.competitions);
-        setIsLoading(false);
-      } catch (e) {}
-    };
-    if (isLoading && startDate) {
-      getCompetitions(startDate.getFullYear().toString());
-    }
-  }, [isLoading, request, startDate]);
+  };
 
   return (
     <>
@@ -72,13 +57,13 @@ export const LeagueForm: React.FC = () => {
         <DatePicker
           views={['year']}
           label="Выберите год"
-          value={startDate}
-          onChange={setStartDate}
+          value={query.year}
+          onChange={onChangeHandler}
           disabled={loading}
         />
       </MuiPickersUtilsProvider>
       <p />
-      <LeagueList competitions={competitions} loading={loading} query={query} />
+      <LeagueList competitions={competitions} loading={loading} />
     </>
   );
 };

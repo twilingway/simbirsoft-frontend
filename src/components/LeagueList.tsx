@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import MaterialTable from '@material-table/core';
-import { Router, Route, Switch, Link, useHistory } from 'react-router-dom';
-import { IQuery } from './LeagueForm';
-
-const queryString = require('query-string');
+import { Context } from '../context';
 
 type LeagueListProps = {
   competitions: any[];
   loading: boolean;
-  query: IQuery;
 };
 
 type Data = {
@@ -48,40 +44,17 @@ const columns = [
 ];
 
 export const LeagueList: React.FC<LeagueListProps> = (props) => {
-  const { competitions, loading, query } = props;
-  let history = useHistory();
-
-  useEffect(() => {
-    console.log('window.location.search; :>> ', window.location.search);
-    console.log('query :>> ', query);
-    // setQuery(queryString.parse(window.location.search));
-  }, []);
-
-  const setQueryParam = (key: string, value: string) => {
-    const tempQuery: IQuery = { ...query };
-    tempQuery[key] = value;
-
-    console.log('tempQuery :>> ', tempQuery);
-    history.push({
-      pathname: '/leagues',
-      search: `?${queryString.stringify(tempQuery)}`,
-    });
-  };
-
-  const deleteQueryParam = (key: string) => {
-    const tempQuery: IQuery = { ...query };
-    delete tempQuery[key];
-    //setQuery({ ...tempQuery });
-  };
+  const { competitions, loading } = props;
+  const { setQueryParam, deleteQueryParam, query } = useContext(Context);
 
   const onSearchChangeHandler = (event: string) => {
-    // setSearch(event);
     if (event) {
       setQueryParam('search', event);
     } else {
       deleteQueryParam('search');
     }
   };
+
   const getCompetitions = () => {
     const data: Data[] = [];
 
