@@ -17,7 +17,10 @@ export const useRoutes = () => {
       <Route path="/league_calendar/:id">
         <LeagueCalendarPage />
       </Route>
-      <Route path="/team_calendar/:id">
+      <Route path="/team_calendar/:id" exact>
+        <TeamCalendarPage />
+      </Route>
+      <Route path="/teams_list/:id">
         <TeamCalendarPage />
       </Route>
       <Redirect to="/leagues" />

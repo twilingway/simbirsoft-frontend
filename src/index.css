@@ -27,3 +27,18 @@ code {
 .react-datepicker-wrapper {
   min-width: 220px;
 }
+
+.navlinks {
+  display: flex;
+  width: 33%;
+  justify-content: left;
+}
+.navlinks a {
+  color: azure;
+  text-decoration: none;
+  padding: 0 8px;
+}
+
+.navlinks a:hover {
+  color: burlywood;
+}

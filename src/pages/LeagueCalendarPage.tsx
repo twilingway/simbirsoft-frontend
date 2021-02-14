@@ -1,9 +1,13 @@
 import React from 'react';
+import { LeagueCalendarForm } from '../components/LeagueCalendarForm';
 
 export const LeagueCalendarPage: React.FC = () => {
   return (
     <div>
-      <h1>LeagueCalendarPage</h1>
+      <div>
+        <h1>Календарь лиги</h1>
+        <LeagueCalendarForm />
+      </div>
     </div>
   );
 };
