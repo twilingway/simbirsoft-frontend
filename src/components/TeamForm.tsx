@@ -12,11 +12,6 @@ export const TeamForm: React.FC = () => {
   const message = useMessage();
   const { setQueryParam, query } = useContext(QueryContext);
 
-  // const newDate: Date = query.year
-  //   ? new Date(Number(query.year), 0, 1)
-  //   : new Date();
-  // console.log('newDate :>> ', newDate);
-
   const [teams, setTeams] = useState([]);
   const { loading, error, request, clearError } = useHttp();
 
@@ -26,7 +21,6 @@ export const TeamForm: React.FC = () => {
         `http://api.football-data.org/v2/teams/`,
         'GET'
       );
-      console.log('Teams :>> ', data);
       setTeams(data.teams);
     } catch (e) {}
   };

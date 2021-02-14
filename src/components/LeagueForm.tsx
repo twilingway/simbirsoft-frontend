@@ -12,11 +12,6 @@ export const LeagueForm: React.FC = () => {
   const message = useMessage();
   const { setQueryParam, query } = useContext(QueryContext);
 
-  // const newDate: Date = query.year
-  //   ? new Date(Number(query.year), 0, 1)
-  //   : new Date();
-  // console.log('newDate :>> ', newDate);
-
   const [competitions, setCompetitions] = useState([]);
   const { loading, error, request, clearError } = useHttp();
 
@@ -26,7 +21,6 @@ export const LeagueForm: React.FC = () => {
         `http://api.football-data.org/v2/competitions/`,
         'GET'
       );
-      console.log('data :>> ', data.competitions);
       setCompetitions(data.competitions);
     } catch (e) {}
   };
@@ -51,7 +45,7 @@ export const LeagueForm: React.FC = () => {
 
   return (
     <>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker
           views={['year']}
           label="Выберите год"
@@ -59,7 +53,7 @@ export const LeagueForm: React.FC = () => {
           onChange={onChangeHandler}
           disabled={loading}
         />
-      </MuiPickersUtilsProvider>
+      </MuiPickersUtilsProvider> */}
       <p />
       <LeagueList competitions={competitions} loading={loading} />
     </>

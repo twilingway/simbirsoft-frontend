@@ -120,21 +120,12 @@ export const LeagueList: React.FC<LeagueListProps> = (props) => {
           },
         ]}
         data={getCompetitions()}
-        // onSearchChange={onSearchChangeHandler}
         onRowClick={(elem, rowData) => {
-          console.log('onRowClick :>> ', rowData);
           clearQueryParam();
           history.push(`/league_calendar/${rowData?.leagueCode}`);
         }}
-        // onChangePage={(elem) => {
-        //   console.log('onChangePage :>> ', elem);
-        // }}
-        // onChangeRowsPerPage={(elem) => {
-        //   console.log('onChangeRowsPerPage :>> ', elem);
-        // }}
         isLoading={loading}
         onFilterChange={(elem) => {
-          console.log('onFilterChange :>> ', elem);
           saveFilters(tableRef);
         }}
       ></MaterialTable>

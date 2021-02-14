@@ -36,15 +36,6 @@ export const TeamCalendarList: React.FC<TeamCalendarListProps> = (props) => {
 
   const getCompetitions = () => {
     const data: Data[] = [];
-    console.log('competitionsCALENDAR :>> ', competitions.matches);
-    console.log('queryCALENDAR :>> ', query);
-    // let filteredData = competitions?.seasons?.filter(
-    //   (item) =>
-    //     item.startDate >= query.startDate && item.endDate <= query.endDate
-    // );
-
-    // console.log('filteredData :>> ', filteredData);
-
     competitions.matches?.forEach((matche: any) => {
       const newItem: Data = {
         id: matche?.id,
@@ -106,8 +97,6 @@ export const TeamCalendarList: React.FC<TeamCalendarListProps> = (props) => {
       data={getCompetitions()}
       onSearchChange={onSearchChangeHandler}
       onRowClick={(elem, rowData) => {
-        // console.log('onRowClickElem :>> ', elem);
-        // console.log('onRowClick :>> ', rowData);
         history.push(`/teams_list/${rowData?.id}`);
       }}
       options={{

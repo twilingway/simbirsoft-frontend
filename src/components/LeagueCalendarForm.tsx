@@ -16,8 +16,8 @@ import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 export const LeagueCalendarForm: React.FC = () => {
   const message = useMessage();
   const id = useParams<any>().id;
-  console.log('linkId :>> ', id);
-  const { setQueryParam, query } = useContext(QueryContext);
+
+  const { query } = useContext(QueryContext);
 
   const [competitions, setCompetitions] = useState<SeasonsList>({});
   const [seasons, setSeasons] = useState([]);

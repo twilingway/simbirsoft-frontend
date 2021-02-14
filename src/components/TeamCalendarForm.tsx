@@ -17,7 +17,6 @@ import { TeamCalendarList, TeamMatchesList } from './TeamCalendarList';
 export const TeamCalendarForm: React.FC = () => {
   const message = useMessage();
   const id = useParams<any>().id;
-  console.log('linkId :>> ', id);
   const { setQueryParam, query } = useContext(QueryContext);
 
   const [competitions, setCompetitions] = useState<TeamMatchesList>({});
@@ -29,7 +28,6 @@ export const TeamCalendarForm: React.FC = () => {
         `http://api.football-data.org/v2/teams/${id}/matches`,
         'GET'
       );
-      console.log('dataTeam :>> ', data.matches);
       setCompetitions({ ...data });
     } catch (e) {}
   };

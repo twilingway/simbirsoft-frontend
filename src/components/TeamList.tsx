@@ -36,17 +36,14 @@ export const TeamList: React.FC<TeamListProps> = (props) => {
     if (event) {
       let newItem = [];
       newItem.push({ field: 'search', filterValue: event });
-      console.log('newSeachItem :>> ', newItem);
+
       setQueryParam('teamsList', newItem);
     }
-    // } else {
-    //   deleteQueryParam('teamsList', search);
-    // }
   };
 
   const getCompetitions = () => {
     const data: Data[] = [];
-    //console.log('TeamLIST :>> ', teams);
+
     teams.forEach((team: any) => {
       const newItem: Data = {
         id: team.id,
@@ -124,7 +121,6 @@ export const TeamList: React.FC<TeamListProps> = (props) => {
       data={getCompetitions()}
       onSearchChange={onSearchChangeHandler}
       onRowClick={(elem, rowData) => {
-        console.log('onRowClick :>> ', rowData);
         clearQueryParam();
         history.push(`/team_calendar/${rowData?.id}`);
       }}

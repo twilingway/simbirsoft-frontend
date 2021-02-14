@@ -45,24 +45,15 @@ export const useQuery = () => {
 
   const setQueryParam = useCallback(
     (key: string, value: []) => {
-      console.log('query :>> ', query);
       let newElem: IQuery = { ...query };
-      console.log('elem :>> ', newElem);
-      //newElem[key] = {};
-
       value.forEach((p: any) => {
         if (p.filterValue) {
           newElem = { ...newElem, [p.field]: p.filterValue };
-          console.log('newElem :>> ', newElem);
         } else if (newElem.hasOwnProperty(p.field)) {
-          console.log('p :>> ', p);
-          console.log('delete :>> ', p.field);
-          console.log('delete :>> ', newElem[p.field]);
           delete newElem[p.field];
-          console.log('AfterDElete :>> ', newElem);
         }
       });
-      console.log('AfterDElete2 :>> ', newElem);
+
       setQuery((elemPre) => {
         return { ...newElem };
       });
@@ -76,8 +67,6 @@ export const useQuery = () => {
   }, []);
 
   useEffect(() => {
-    // console.log('queryFOrm :>> ', query);
-    console.log(' window.location :>> ', window.location.pathname);
     setReady(true);
     pushTo(window.location.pathname);
   }, [pushTo]);
