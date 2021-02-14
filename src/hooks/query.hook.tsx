@@ -6,16 +6,14 @@ export interface IObjectKeys {
   [key: string]: string | number | undefined | object;
 }
 export interface IQuery extends IObjectKeys {
-  //leaguesList?: object;
-  //teamsList?: object;
-  // name?: string;
-  // leagueCode?: string;
-  // search?: string;
-  // year?: string;
-  // page?: string;
-  // row?: string;
-  // startDate?: string;
-  // endDate?: string;
+  name?: string;
+  leagueCode?: string;
+  search?: string;
+  year?: string;
+  page?: string;
+  row?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const useQuery = () => {
